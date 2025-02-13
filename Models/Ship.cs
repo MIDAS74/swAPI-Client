@@ -1,20 +1,16 @@
-﻿namespace swAPI_Client.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace swAPI_Client.Models;
 
 public class Ship
 {
-    // bad naming convention, blame target API
+    // ugly snake_case naming convention, blame target API
+    [JsonPropertyName("MGLT")]
     public String MGLT { get; set; }
+    [JsonPropertyName("model")]
     public String model { get; set; }
+    [JsonPropertyName("name")]
     public String name { get; set; }
+    [JsonPropertyName("starship_class")]
     public String starship_class { get; set; }
-    //public int CargoCapacity { get; set; }
-    //public int Consumables { get; set; }
-    //public int CostInCredits { get; set; }
-    //public int Crew { get; set; }
-    //public int HyperdriveRating { get; set; }
-    //public int Length { get; set; }
-    //public String Manufacturer { get; set; }
-    //public int Passengers { get; set; }
-
-
 }

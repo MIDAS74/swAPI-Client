@@ -1,21 +1,23 @@
 ﻿using Spectre.Console;
-
+using swAPI_Client.Services;
 using System.Net.Http;
 
 namespace swAPI_Client
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             // initialize application menu, repos and services
             var menu = new Menu();
+            var shipService = new ShipService();
 
-            //// test that API is reachable
-            //var httpClient = new HttpClient();
-            //httpClient.BaseAddress = new System.Uri("https://swapi.dev/api/");
-            //var response = httpClient.GetAsync("starships/").Result;
-            //Console.WriteLine(response);
+            // populate ship list
+            await shipService.PopulateList();
+            // print to test
+            shipService.PrintList();
+
+
 
             // show menu
             menu.Show();

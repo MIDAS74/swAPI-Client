@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+﻿using Newtonsoft.Json;
 using Spectre.Console;
 using swAPI_Client.Models;
 
@@ -6,46 +6,29 @@ namespace swAPI_Client.Repos;
 
 public class ShipRepo
 {
-    static string baseUrl = "https://swapi.dev/api/";
+    private Ship Ship { get; set; }
 
-    public static async Task<List<Ship>> GetShipsAsync(HttpClient httpClient)
+    // get list of all ships from API
+    public async Task<List<Ship>> GetShipsAsync(HttpClient httpClient)
     {
-        var url = baseUrl + "starships/";
-        HttpResponseMessage response = await httpClient.GetAsync(url);
+        var apiUrl = "https://swapi.dev/api/starships/";
 
-        if (response.IsSuccessStatusCode)
+        var ships = new List<Ship>();
+
+        while (!string.IsNullOrEmpty(apiUrl))
         {
-            var jsonString = await response.Content.ReadAsStringAsync();
-            var ships = JsonSerializer.Deserialize<List<Ship>>(jsonString, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-            return ships;
+            var response = await httpClient.GetAsync(apiUrl);
+            var content = await response.Content.ReadAsStringAsync();
+            var paginatedShips = JsonConvert.DeserializeObject<PaginatedStarshipResponse>(content);
+            ships.AddRange(paginatedShips.Results);
+            apiUrl = paginatedShips.Next;
         }
-        else
-        {
-            // Handle error response
-            return new List<Ship>();
-        }
+
+        return ships;
     }
 
-    public static async Task<Ship> GetShipByIdAsync(HttpClient httpClient, int id)
-    {
-        var url = baseUrl + $"starships/{id}/";
-        HttpResponseMessage response = await httpClient.GetAsync(url);
-        if (response.IsSuccessStatusCode)
-        {
-            var jsonString = await response.Content.ReadAsStringAsync();
-            var ship = JsonSerializer.Deserialize<Ship>(jsonString, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-            return ship;
-        }
-        else
-        {
-            // Handle error response
-            return new Ship();
-        }
-    }
+    //public async Task<Ship> GetShipByIdAsync(HttpClient httpClient, int id)
+    //{
+    //    // get a ship by id
+    //}
 }
