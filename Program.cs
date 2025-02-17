@@ -14,13 +14,11 @@ namespace swAPI_Client
 
             // populate ship list
             await shipService.PopulateList();
-            // print to test
-            shipService.PrintList();
 
 
 
             // show menu
-            menu.Show();
+            menu.Show(shipService);
         }
     }
 }
