@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Spectre.Console;
 using swAPI_Client.Models;
 using swAPI_Client.Repos;
-using Spectre.Console;
 
 namespace swAPI_Client.Services
 {
@@ -71,7 +66,7 @@ namespace swAPI_Client.Services
                     }
                     hours *= Convert.ToDecimal(consumables[0]);
 
-                    var stops = megalights / (Convert.ToDecimal(ship.MGLT) * hours);
+                    var stops = Math.Floor(megalights / (Convert.ToDecimal(ship.MGLT) * hours));
                     // output
                     AnsiConsole.MarkupLine($"[bold]Name:\t[/]{ship.name}\n" +
                         $"[bold]Model:\t[/]{ship.model}\n" +

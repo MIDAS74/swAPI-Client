@@ -8,7 +8,7 @@ public class Menu
     public void Show(ShipService shipService)
     {
         // basic spectre hello-world, into a prompt for decimal input of mega-lights
-        AnsiConsole.Markup("[underline green]Welcome to Star Wars API Client![/]\n\n");
+        AnsiConsole.Markup("[underline green]Welcome to Star Wars API Client![/] \n(navigate with up and down arrow keys, enter to confirm. You may be prompted for other input, just type and enter again)\n\n");
 
         while (true)
         {
