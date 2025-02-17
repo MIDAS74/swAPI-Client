@@ -15,15 +15,18 @@ public class Menu
             var choice = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
                     .Title("[bold yellow]Choose an option[/]")
-                    .PageSize(3)
+                    .PageSize(4)
                     .AddChoices(new[] {
-                    "List all ships", "Calculate pitstops", "Exit"
+                    "List all ships", "Full Ship Data", "Calculate pitstops", "Exit"
                     }));
 
             switch (choice)
             {
                 case "List all ships":
                     shipService.PrintList();
+                    break;
+                case "Full Ship Data":
+                    GetShipData(shipService);
                     break;
                 case "Calculate pitstops":
                     ShowPitstops(shipService);
@@ -45,5 +48,14 @@ public class Menu
 
         // call ShipService for amount of pitstops from internal list
         shipService.CalculatePitstops(megalights);
+    }
+
+    public void GetShipData(ShipService shipService)
+    {
+        var name = AnsiConsole.Prompt(
+            new TextPrompt<string>("Enter ship name"));
+
+        // call ShipService for full data on single ship
+        shipService.GetShipData(name);
     }
 }
