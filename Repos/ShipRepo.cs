@@ -1,23 +1,30 @@
 ﻿using Newtonsoft.Json;
-using Spectre.Console;
 using swAPI_Client.Models;
 
 namespace swAPI_Client.Repos;
 
-public class ShipRepo
+public class ShipRepo : IShipRepo
 {
-    private Ship Ship { get; set; }
+    private readonly HttpClient _httpClient;
 
-    // get list of all ships from API
-    public async Task<List<Ship>> GetShipsAsync(HttpClient httpClient)
+    public ShipRepo(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
+    }
+
+    /// <summary>
+    /// Gets list of Ship objects as JSON from swapi.dev/api/starships
+    /// </summary>
+    /// <param name="httpClient"></param>
+    /// <returns>Task{List{Ship}}</returns>
+    public async Task<List<Ship>> GetShipsAsync()
     {
         var apiUrl = "https://swapi.dev/api/starships/";
-
         var ships = new List<Ship>();
 
         while (!string.IsNullOrEmpty(apiUrl))
         {
-            var response = await httpClient.GetAsync(apiUrl);
+            var response = await _httpClient.GetAsync(apiUrl);
             var content = await response.Content.ReadAsStringAsync();
             var paginatedShips = JsonConvert.DeserializeObject<PaginatedStarshipResponse>(content);
             ships.AddRange(paginatedShips.Results);
@@ -26,9 +33,4 @@ public class ShipRepo
 
         return ships;
     }
-
-    //public async Task<Ship> GetShipByIdAsync(HttpClient httpClient, int id)
-    //{
-    //    // get a ship by id
-    //}
 }

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace swAPI_Client.Models
 {
+    /// <summary>
+    /// Contain the List format JSON return from swapi.dev/api/starships/
+    /// </summary>
     public class PaginatedStarshipResponse
     {
         [JsonPropertyName("count")]

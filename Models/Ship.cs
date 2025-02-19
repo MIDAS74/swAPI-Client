@@ -29,6 +29,9 @@ namespace swAPI_Client.Models;
 //    "url": "https://swapi.dev/api/starships/9/"
 //}
 
+/// <summary>
+/// holds per-ship details of JSON return from swapi.dev/api/starships/
+/// </summary>
 public class Ship
 {
     // ugly snake_case naming convention, blame target API

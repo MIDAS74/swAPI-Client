@@ -4,34 +4,54 @@ using swAPI_Client.Repos;
 
 namespace swAPI_Client.Services
 {
-    public class ShipService
+    public class ShipService : IShipService
     {
-        private HttpClient httpClient = new HttpClient();
-        private List<Ship> ships = new List<Ship>();
+        private readonly IShipRepo _shipRepo;
+        private readonly List<Ship> _ships;
 
-        public async Task PopulateList()
+        public ShipService(IShipRepo shipRepo)
         {
-            ShipRepo shipRepo = new ShipRepo();
-            var shipsList = await shipRepo.GetShipsAsync(httpClient);
-            ships.AddRange(shipsList);
+            _shipRepo = shipRepo;
+            _ships = new List<Ship>();
         }
 
-        public void PrintList()
+        /// <summary>
+        /// calls GetShipsAsync from ShipRepo instance, then populates the ships list
+        /// </summary>
+        public async Task PopulateList()
         {
-            foreach (var ship in ships)
+            var shipsList = await _shipRepo.GetShipsAsync();
+            _ships.AddRange(shipsList);
+        }
+
+        /// <summary>
+        /// prints name, model, class, megalights and consumables in Spectre.Console
+        /// </summary>
+        public List<string> ListShips()
+        {
+            var output = new List<string>();
+            foreach (var ship in _ships)
             {
-                AnsiConsole.MarkupLine($"[bold yellow]Name:\t[/]{ship.name}\n" +
+                var shipStr = $"[bold yellow]Name:\t[/]{ship.name}\n" +
                     $"[bold yellow]Model:\t[/]{ship.model}\n" +
                     $"[bold yellow]Class:\t[/]{ship.starship_class}\n" +
                     $"[bold yellow]Megalights:\t[/]{ship.MGLT}\n\n" +
-                    $"[bold yellow]Consumables:\t[/]{ship.consumables}\n\n");
+                    $"[bold yellow]Consumables:\t[/]{ship.consumables}\n\n";
             }
+
+            return output;
         }
 
-        public void CalculatePitstops(decimal megalights)
+        /// <summary>
+        /// gets ships with MGLT and consumables, calculates pitstops and outputs
+        /// </summary>
+        /// <param name="megalights"></param>
+        public List<string> CalculatePitstops(decimal megalights)
         {
+            var output = new List<string>();
+
             // for each ship in list, check that MGLT is not unknown
-            foreach (var ship in ships)
+            foreach (var ship in _ships)
             {
                 if (!(ship.MGLT == "unknown"))
                 {
@@ -64,48 +84,56 @@ namespace swAPI_Client.Services
                             hours = 0;
                             break;
                     }
+
                     hours *= Convert.ToDecimal(consumables[0]);
 
                     var stops = Math.Floor(megalights / (Convert.ToDecimal(ship.MGLT) * hours));
-                    // output
-                    AnsiConsole.MarkupLine($"[bold]Name:\t[/]{ship.name}\n" +
-                        $"[bold]Model:\t[/]{ship.model}\n" +
-                        $"[bold]Class:\t[/]{ship.starship_class}\n" +
-                        $"[bold]Megalights:\t[/]{ship.MGLT}\n" +
-                        $"[bold]Consumables:\t[/]{ship.consumables}\n" +
-                        $"[bold cyan]Pitstops:\t[/]{Math.Ceiling(stops)}\n\n");
+
+                    var shipStr = $"[bold cyan]{ship.name}:[/] {Math.Ceiling(stops)}\n\n";
+
+                    output.Add(shipStr);
                 }
             }
+
+            // output
+            return output;
         }
 
-        public void GetShipData(string name)
+        /// <summary>
+        /// prompts user for case sensitive ship name, outputs full ship data
+        /// </summary>
+        /// <param name="name"></param>
+        public string GetShipByName(string name)
         {
-            var ship = ships.FirstOrDefault(s => s.name == name);
+            var output = "";
+            var ship = _ships.FirstOrDefault(s => s.name == name);
             if (ship == null)
             {
-                AnsiConsole.MarkupLine("[bold red]Ship not found![/]");
+                output = "[underline red]Ship not found![/]";
             }
             else
             {
-                AnsiConsole.MarkupLine($"[bold]Name:\t[/]{ship.name}\n" +
-                    $"[bold]Model:\t[/]{ship.model}\n" +
-                    $"[bold]Class:\t[/]{ship.starship_class}\n" +
-                    $"[bold]Megalights:\t[/]{ship.MGLT}\n" +
-                    $"[bold]Cargo Capacity:\t[/]{ship.cargo_capacity}\n" +
-                    $"[bold]Consumables:\t[/]{ship.consumables}\n" +
-                    $"[bold]Cost in Credits:\t[/]{ship.cost_in_credits}\n" +
-                    $"[bold]Created:\t[/]{ship.created}\n" +
-                    $"[bold]Crew:\t[/]{ship.crew}\n" +
-                    $"[bold]Edited:\t[/]{ship.edited}\n" +
-                    $"[bold]Hyperdrive Rating:\t[/]{ship.hyperdrive_rating}\n" +
-                    $"[bold]Length:\t[/]{ship.length}\n" +
-                    $"[bold]Manufacturer:\t[/]{ship.manufacturer}\n" +
-                    $"[bold]Max Atmosphering Speed:\t[/]{ship.max_atmosphering_speed}\n" +
-                    $"[bold]Passengers:\t[/]{ship.passengers}\n" +
-                    $"[bold]Films:\t[/]{string.Join(", ", ship.films)}\n" +
-                    $"[bold]Pilots:\t[/]{string.Join(", ", ship.pilots)}\n" +
-                    $"[bold]URL:\t[/]{ship.url}\n\n");
+                output = $"[bold blue]Name:\t[/]{ship.name}\n" +
+                    $"[bold blue]Model:\t[/]{ship.model}\n" +
+                    $"[bold blue]Class:\t[/]{ship.starship_class}\n" +
+                    $"[bold blue]Megalights:\t[/]{ship.MGLT}\n" +
+                    $"[bold blue]Cargo Capacity:\t[/]{ship.cargo_capacity}\n" +
+                    $"[bold blue]Consumables:\t[/]{ship.consumables}\n" +
+                    $"[bold blue]Cost in Credits:\t[/]{ship.cost_in_credits}\n" +
+                    $"[bold blue]Created:\t[/]{ship.created}\n" +
+                    $"[bold blue]Crew:\t[/]{ship.crew}\n" +
+                    $"[bold blue]Edited:\t[/]{ship.edited}\n" +
+                    $"[bold blue]Hyperdrive Rating:\t[/]{ship.hyperdrive_rating}\n" +
+                    $"[bold blue]Length:\t[/]{ship.length}\n" +
+                    $"[bold blue]Manufacturer:\t[/]{ship.manufacturer}\n" +
+                    $"[bold blue]Max Atmosphering Speed:\t[/]{ship.max_atmosphering_speed}\n" +
+                    $"[bold blue]Passengers:\t[/]{ship.passengers}\n" +
+                    $"[bold blue]Films:\t[/]{string.Join(", ", ship.films)}\n" +
+                    $"[bold blue]Pilots:\t[/]{string.Join(", ", ship.pilots)}\n" +
+                    $"[bold blue]URL:\t[/]{ship.url}\n\n";
             }
+
+            return output;
         }
 
     }

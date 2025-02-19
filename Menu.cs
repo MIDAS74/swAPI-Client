@@ -3,11 +3,18 @@ using swAPI_Client.Services;
 
 namespace swAPI_Client;
 
-public class Menu
+public class Menu(IShipService shipService)
 {
-    public void Show(ShipService shipService)
+    private readonly IShipService _shipService = shipService;
+
+    /// <summary>
+    /// Spectre.Console menu loop, options currently include: 
+    /// partial data on all ships in list, full data on singular ships
+    /// calculating pitstops
+    /// </summary>
+    /// <param name="shipService"></param>
+    public void Show()
     {
-        // basic spectre hello-world, into a prompt for decimal input of mega-lights
         AnsiConsole.Markup("[underline green]Welcome to Star Wars API Client![/] \n(navigate with up and down arrow keys, enter to confirm. You may be prompted for other input, just type and enter again)\n\n");
 
         while (true)
@@ -23,13 +30,13 @@ public class Menu
             switch (choice)
             {
                 case "List all ships":
-                    shipService.PrintList();
+                    shipService.ListShips();
                     break;
                 case "Full Ship Data":
-                    GetShipData(shipService);
+                    GetShipData();
                     break;
                 case "Calculate pitstops":
-                    ShowPitstops(shipService);
+                    ShowPitstops();
                     break;
                 case "Exit":
                     AnsiConsole.Markup("[bold red]Goodbye![/]");
@@ -40,22 +47,33 @@ public class Menu
         }
     }
 
-    public void ShowPitstops(ShipService shipService)
+    /// <summary>
+    /// calls CalculatePitstops for Show()
+    /// </summary>
+    /// <param name="shipService"></param>
+    public void ShowPitstops()
     {
         var megalights = AnsiConsole.Prompt(
             new TextPrompt<decimal>("Enter a distance in Megalights"));
         AnsiConsole.Markup($"For a given distance of {megalights} Megalights, the following pitstops are needed:\n\n");
 
         // call ShipService for amount of pitstops from internal list
-        shipService.CalculatePitstops(megalights);
+        foreach (var shipStr in _shipService.CalculatePitstops(megalights))
+        {
+            AnsiConsole.Markup(shipStr);
+        }
     }
 
-    public void GetShipData(ShipService shipService)
+    /// <summary>
+    /// calls GetShipData for Show()
+    /// </summary>
+    /// <param name="shipService"></param>
+    public void GetShipData()
     {
         var name = AnsiConsole.Prompt(
             new TextPrompt<string>("Enter ship name"));
 
         // call ShipService for full data on single ship
-        shipService.GetShipData(name);
+        AnsiConsole.Markup(_shipService.GetShipByName(name));
     }
 }
