@@ -4,7 +4,7 @@ using swAPI_Client.Models;
 
 namespace swAPI_Client.Repos;
 
-public class ShipRepo
+public class ShipRepo : IShipRepo
 {
     private Ship Ship { get; set; }
 
