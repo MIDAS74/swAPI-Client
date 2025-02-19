@@ -17,6 +17,11 @@ namespace swAPI_Client
                 .AddSingleton<Menu>()
                 .BuildServiceProvider();
 
+            // initialise ShipService list
+            var shipService = serviceProvider.GetService<IShipService>();
+            await shipService.PopulateList();
+
+            // show menu
             var menu = serviceProvider.GetService<Menu>();
             menu.Show();
 

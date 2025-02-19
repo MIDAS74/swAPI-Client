@@ -6,17 +6,22 @@ namespace swAPI_Client.Services
 {
     public class ShipService : IShipService
     {
-        private HttpClient httpClient = new HttpClient();
-        private List<Ship> ships = new List<Ship>();
+        private readonly IShipRepo _shipRepo;
+        private readonly List<Ship> _ships;
+
+        public ShipService(IShipRepo shipRepo)
+        {
+            _shipRepo = shipRepo;
+            _ships = new List<Ship>();
+        }
 
         /// <summary>
         /// calls GetShipsAsync from ShipRepo instance, then populates the ships list
         /// </summary>
         public async Task PopulateList()
         {
-            ShipRepo shipRepo = new ShipRepo();
-            var shipsList = await shipRepo.GetShipsAsync(httpClient);
-            ships.AddRange(shipsList);
+            var shipsList = await _shipRepo.GetShipsAsync();
+            _ships.AddRange(shipsList);
         }
 
         /// <summary>
@@ -25,7 +30,7 @@ namespace swAPI_Client.Services
         public List<string> ListShips()
         {
             var output = new List<string>();
-            foreach (var ship in ships)
+            foreach (var ship in _ships)
             {
                 var shipStr = $"[bold yellow]Name:\t[/]{ship.name}\n" +
                     $"[bold yellow]Model:\t[/]{ship.model}\n" +
@@ -46,7 +51,7 @@ namespace swAPI_Client.Services
             var output = new List<string>();
 
             // for each ship in list, check that MGLT is not unknown
-            foreach (var ship in ships)
+            foreach (var ship in _ships)
             {
                 if (!(ship.MGLT == "unknown"))
                 {
@@ -84,12 +89,7 @@ namespace swAPI_Client.Services
 
                     var stops = Math.Floor(megalights / (Convert.ToDecimal(ship.MGLT) * hours));
 
-                    var shipStr = $"[bold]Name:\t[/]{ship.name}\n" +
-                        $"[bold]Model:\t[/]{ship.model}\n" +
-                        $"[bold]Class:\t[/]{ship.starship_class}\n" +
-                        $"[bold]Megalights:\t[/]{ship.MGLT}\n" +
-                        $"[bold]Consumables:\t[/]{ship.consumables}\n" +
-                        $"[bold cyan]Pitstops:\t[/]{Math.Ceiling(stops)}\n\n";
+                    var shipStr = $"[bold cyan]{ship.name}:[/] {Math.Ceiling(stops)}\n\n";
 
                     output.Add(shipStr);
                 }
@@ -106,7 +106,7 @@ namespace swAPI_Client.Services
         public string GetShipByName(string name)
         {
             var output = "";
-            var ship = ships.FirstOrDefault(s => s.name == name);
+            var ship = _ships.FirstOrDefault(s => s.name == name);
             if (ship == null)
             {
                 output = "[underline red]Ship not found![/]";
