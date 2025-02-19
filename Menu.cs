@@ -5,9 +5,15 @@ namespace swAPI_Client;
 
 public class Menu
 {
+
+    /// <summary>
+    /// Spectre.Console menu loop, options currently include: 
+    /// partial data on all ships in list, full data on singular ships
+    /// calculating pitstops
+    /// </summary>
+    /// <param name="shipService"></param>
     public void Show(ShipService shipService)
     {
-        // basic spectre hello-world, into a prompt for decimal input of mega-lights
         AnsiConsole.Markup("[underline green]Welcome to Star Wars API Client![/] \n(navigate with up and down arrow keys, enter to confirm. You may be prompted for other input, just type and enter again)\n\n");
 
         while (true)
@@ -40,6 +46,10 @@ public class Menu
         }
     }
 
+    /// <summary>
+    /// calls CalculatePitstops for Show()
+    /// </summary>
+    /// <param name="shipService"></param>
     public void ShowPitstops(ShipService shipService)
     {
         var megalights = AnsiConsole.Prompt(
@@ -50,6 +60,10 @@ public class Menu
         shipService.CalculatePitstops(megalights);
     }
 
+    /// <summary>
+    /// calls GetShipData for Show()
+    /// </summary>
+    /// <param name="shipService"></param>
     public void GetShipData(ShipService shipService)
     {
         var name = AnsiConsole.Prompt(

@@ -8,7 +8,11 @@ public class ShipRepo
 {
     private Ship Ship { get; set; }
 
-    // get list of all ships from API
+    /// <summary>
+    /// Gets list of Ship objects as JSON from swapi.dev/api/starships
+    /// </summary>
+    /// <param name="httpClient"></param>
+    /// <returns>Task{List{Ship}}</returns>
     public async Task<List<Ship>> GetShipsAsync(HttpClient httpClient)
     {
         var apiUrl = "https://swapi.dev/api/starships/";
@@ -26,9 +30,4 @@ public class ShipRepo
 
         return ships;
     }
-
-    //public async Task<Ship> GetShipByIdAsync(HttpClient httpClient, int id)
-    //{
-    //    // get a ship by id
-    //}
 }
