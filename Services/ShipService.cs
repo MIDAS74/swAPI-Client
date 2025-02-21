@@ -37,6 +37,7 @@ namespace swAPI_Client.Services
                     $"[bold yellow]Class:\t[/]{ship.starship_class}\n" +
                     $"[bold yellow]Megalights:\t[/]{ship.MGLT}\n\n" +
                     $"[bold yellow]Consumables:\t[/]{ship.consumables}\n\n";
+                output.Add(shipStr);
             }
 
             return output;
