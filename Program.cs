@@ -1,5 +1,7 @@
 ﻿using swAPI_Client.Repos;
 using swAPI_Client.Services;
+using swAPI_Client.Menus;
+using swAPI_Client.Menus.SpectreConsole;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
 
@@ -14,6 +16,8 @@ namespace swAPI_Client
                 .AddSingleton<HttpClient>()
                 .AddSingleton<IShipRepo, ShipRepo>()
                 .AddSingleton<IShipService, ShipService>()
+                .AddSingleton<IConsoleOutput, SpectreConsoleOutput>()
+                .AddSingleton<IConsoleInput, SpectreConsoleInput>()
                 .AddSingleton<Menu>()
                 .BuildServiceProvider();
 
@@ -21,10 +25,14 @@ namespace swAPI_Client
             var shipService = serviceProvider.GetService<IShipService>();
             await shipService.PopulateList();
 
-            // show menu
+            // initialize and show menu
+            var consoleOutput = serviceProvider.GetService<IConsoleOutput>();
+            var consoleInput = serviceProvider.GetService<IConsoleInput>();
             var menu = serviceProvider.GetService<Menu>();
             menu.Show();
 
+
+            // OLD CODE
             //// initialize application menu, repos and services
             //var menu = new Menu();
             //var shipService = new ShipService();
