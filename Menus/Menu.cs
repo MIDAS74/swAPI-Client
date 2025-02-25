@@ -1,7 +1,4 @@
 ﻿using swAPI_Client.Services;
-using swAPI_Client.Menus.SpectreConsole;
-using swAPI_Client.Repos;
-using Spectre.Console;
 
 namespace swAPI_Client.Menus;
 

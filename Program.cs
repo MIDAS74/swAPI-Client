@@ -1,9 +1,8 @@
-﻿using swAPI_Client.Repos;
-using swAPI_Client.Services;
+﻿using Microsoft.Extensions.DependencyInjection;
 using swAPI_Client.Menus;
 using swAPI_Client.Menus.SpectreConsole;
-using Microsoft.Extensions.DependencyInjection;
-using System.Net.Http;
+using swAPI_Client.Repos;
+using swAPI_Client.Services;
 
 namespace swAPI_Client
 {

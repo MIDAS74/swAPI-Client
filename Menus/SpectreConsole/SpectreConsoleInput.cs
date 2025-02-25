@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Spectre.Console;
+﻿using Spectre.Console;
 
 namespace swAPI_Client.Menus.SpectreConsole
 {
@@ -32,8 +27,8 @@ namespace swAPI_Client.Menus.SpectreConsole
         public string PromptText(string message)
         {
             return AnsiConsole.Prompt(
-                new TextPrompt<string>(message)); 
-             
+                new TextPrompt<string>(message));
+
         }
 
         /// <summary>

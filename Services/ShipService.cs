@@ -1,13 +1,12 @@
-﻿using Spectre.Console;
-using swAPI_Client.Models;
+﻿using swAPI_Client.Models;
 using swAPI_Client.Repos;
 
 namespace swAPI_Client.Services
 {
     public class ShipService : IShipService
     {
-        private readonly IShipRepo _shipRepo;
-        private readonly List<Ship> _ships;
+        private IShipRepo _shipRepo;
+        private List<Ship> _ships;
 
         public ShipService(IShipRepo shipRepo)
         {
@@ -129,8 +128,6 @@ namespace swAPI_Client.Services
                     $"[bold blue]Manufacturer:\t[/]{ship.manufacturer}\n" +
                     $"[bold blue]Max Atmosphering Speed:\t[/]{ship.max_atmosphering_speed}\n" +
                     $"[bold blue]Passengers:\t[/]{ship.passengers}\n" +
-                    $"[bold blue]Films:\t[/]{string.Join(", ", ship.films)}\n" +
-                    $"[bold blue]Pilots:\t[/]{string.Join(", ", ship.pilots)}\n" +
                     $"[bold blue]URL:\t[/]{ship.url}\n\n";
             }
 
