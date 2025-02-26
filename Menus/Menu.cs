@@ -27,17 +27,17 @@ public class Menu
         {
             var choice = _consoleInput.PromptSelection("Choose an option",
                 new[] {
-                    "List all ships", "Full Ship Data", "Calculate pitstops", "Exit"
+                    "List All Ships", "Full Ship Data", "Calculate Pitstops", "Exit"
                 });
             switch (choice)
             {
-                case "List all ships":
+                case "List All Ships":
                     _consoleOutput.WriteCollection(_shipService.ListShips());
                     break;
                 case "Full Ship Data":
                     GetShipData();
                     break;
-                case "Calculate pitstops":
+                case "Calculate Pitstops":
                     ShowPitstops();
                     break;
                 case "Exit":
