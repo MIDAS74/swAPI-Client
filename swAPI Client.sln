@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "swAPI Client", "swAPI Client.csproj", "{218BC449-1488-47C9-BC7E-4F0EEBE3790E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "swAPIClient.Console", "swAPIClient.Console\swAPIClient.csproj", "{218BC449-1488-47C9-BC7E-4F0EEBE3790E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "swAPI Client.Tests", "..\swAPI Client.Tests\swAPI Client.Tests.csproj", "{82E64274-591F-479A-8A51-D5668FEA9FB3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "swAPIClient.Tests", "swAPIClient.Tests\swAPIClient.Tests.csproj", "{82E64274-591F-479A-8A51-D5668FEA9FB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
